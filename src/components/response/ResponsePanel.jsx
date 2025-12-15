@@ -5,7 +5,7 @@ import ErrorState from "./ErrorState";
 import { useChaos } from "../../context/useChaos";
 
 export default function ResponsePanel() {
-  const { status } = useChaos();
+  const { status, data, errorInfo } = useChaos();
 
   return (
     <section className="flex h-full flex-col rounded-xl bg-[#0f1629] p-6 shadow-[0_0_0_1px_#1f2a44] md:p-6">
@@ -21,8 +21,8 @@ export default function ResponsePanel() {
       <div className="flex-1 rounded-md bg-[#0b0f1a] p-4 md:p-6">
         {status === "idle" && <IdleState />}
         {status === "loading" && <LoadingState />}
-        {status === "success" && <SuccessState />}
-        {status === "error" && <ErrorState />}
+        {status === "success" && <SuccessState data={data} />}
+        {status === "error" && <ErrorState error={errorInfo} />}
       </div>
     </section>
   );

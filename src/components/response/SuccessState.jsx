@@ -1,13 +1,7 @@
-const MOCK_DATA = [
-  { id: 1, name: "Alpha", status: "active" },
-  { id: 2, name: "Beta", status: "pending" },
-  { id: 3, name: "Gamma", status: "active" },
-];
-
-export default function SuccessState() {
+export default function SuccessState({data}) {
   return (
     <ul className="space-y-2">
-      {MOCK_DATA.map((item) => (
+      {data.map((item) => (
         <li
           key={item.id}
           className="

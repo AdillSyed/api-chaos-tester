@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-const ChaosContext = createContext(null);
+export const ChaosContext = createContext(null);
 
 export function ChaosProvider({ children }) {
   const [config, setConfig] = useState({
@@ -10,6 +10,9 @@ export function ChaosProvider({ children }) {
   });
 
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [data, setData] = useState(null);
+  const [errorInfo, setErrorInfo] = useState(null);
+
 
   return (
     <ChaosContext.Provider
@@ -18,7 +21,11 @@ export function ChaosProvider({ children }) {
         setConfig,
         status,
         setStatus,
-      }}
+        data,
+        setData,
+        errorInfo,
+        setErrorInfo,
+}}
     >
       {children}
     </ChaosContext.Provider>
