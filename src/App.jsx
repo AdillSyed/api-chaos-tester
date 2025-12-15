@@ -12,7 +12,7 @@ function App() {
           Simulate API failures to test UI resilience
         </p>
       </header>
-      <div className="grid gap-6 md:h-[calc(100vh-120px)] md:grid-cols-[360px_1fr]">
+      <div className="grid gap-6 md:min-h-[calc(100vh-120px)] md:grid-cols-[360px_1fr]">
         <ChaosControls />
         <ResponsePanel />
       </div>

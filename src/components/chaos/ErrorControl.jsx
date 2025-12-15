@@ -1,3 +1,5 @@
+import { useChaos } from "../../context/useChaos";
+
 const OPTIONS = [
   { label: "None", value: "none" },
   { label: "400 – Bad Request", value: "400" },
@@ -6,6 +8,8 @@ const OPTIONS = [
 ];
 
 export default function ErrorControl() {
+  const { config, setConfig } = useChaos();
+
   return (
     <div>
       <p className="mb-2 text-sm font-medium text-gray-300">
@@ -16,21 +20,21 @@ export default function ErrorControl() {
         {OPTIONS.map((opt) => (
           <label
             key={opt.value}
-            className="
-              flex items-center gap-2 rounded-md px-2 py-1
-              hover:bg-[#162040]
-              transition
-              text-sm text-gray-300
-            "
+            className="flex items-center gap-2 rounded-md px-2 py-1 hover:bg-[#162040]"
           >
             <input
               type="radio"
               name="error"
               value={opt.value}
-              defaultChecked={opt.value === "none"}
+              checked={config.error === opt.value}
+              onChange={() =>
+                setConfig({ ...config, error: opt.value })
+              }
               className="accent-cyan-400"
             />
-            {opt.label}
+            <span className="text-sm text-gray-300">
+              {opt.label}
+            </span>
           </label>
         ))}
       </div>

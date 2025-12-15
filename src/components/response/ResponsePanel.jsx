@@ -2,9 +2,10 @@ import IdleState from "./IdleState";
 import LoadingState from "./LoadingState";
 import SuccessState from "./SuccessState";
 import ErrorState from "./ErrorState";
+import { useChaos } from "../../context/useChaos";
 
 export default function ResponsePanel() {
-  const status = "idle"; // idle | loading | success | error
+  const { status } = useChaos();
 
   return (
     <section className="flex h-full flex-col rounded-xl bg-[#0f1629] p-6 shadow-[0_0_0_1px_#1f2a44] md:p-6">
