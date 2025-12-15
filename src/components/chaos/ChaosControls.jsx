@@ -8,12 +8,12 @@ import ScenarioPresets from "../presets/ScenarioPresets";
 import SavePresetModal from "../presets/SavePresetModal";
 
 export default function ChaosControls() {
-  const { config, setStatus, setData, setErrorInfo, addLog } = useChaos();
+  const { config, status, setStatus, setData, setErrorInfo, addLog } = useChaos();
   const [showSave, setShowSave] = useState(false);
 
   const abortRef = useRef(null);
   const handleSend = async () => {
-    if (abortRef.current) {
+    if (abortRef.current && status === "loading") {
       abortRef.current.abort();
       addLog({
         type: "abort",
@@ -59,6 +59,8 @@ export default function ChaosControls() {
 
       setErrorInfo(err);
       setStatus("error");
+    } finally {
+      abortRef.current = null;
     }
   };
 
