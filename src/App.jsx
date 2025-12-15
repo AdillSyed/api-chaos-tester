@@ -1,4 +1,5 @@
 import ChaosControls from "./components/chaos/ChaosControls";
+import ResponsePanel from "./components/response/ResponsePanel";
 
 function App() {
   return (
@@ -11,13 +12,9 @@ function App() {
           Simulate API failures to test UI resilience
         </p>
       </header>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid h-[calc(100vh-120px)] grid-cols-1 gap-6 md:grid-cols-[360px_1fr]">
         <ChaosControls />
-        <div className="md:col-span-2 rounded-lg bg-white p-6 shadow-sm">
-          <p className="text-gray-400 text-sm">
-            UI Response Panel (coming next)
-          </p>
-        </div>
+        <ResponsePanel />
       </div>
     </div>
   );
