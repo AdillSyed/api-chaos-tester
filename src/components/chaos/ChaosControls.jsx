@@ -1,68 +1,67 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import DelayControl from "./DelayControl";
 import ErrorControl from "./ErrorControl";
 import NetworkControl from "./NetworkControl";
 import { useChaos } from "../../context/useChaos";
-import { fetchData } from "../../services/apiClient";
 import ScenarioPresets from "../presets/ScenarioPresets";
 import SavePresetModal from "../presets/SavePresetModal";
 
 export default function ChaosControls() {
-  const { config, status, setStatus, setData, setErrorInfo, addLog } = useChaos();
+  const { runRequest } = useChaos();
   const [showSave, setShowSave] = useState(false);
 
-  const abortRef = useRef(null);
-  const handleSend = async () => {
-    if (abortRef.current && status === "loading") {
-      abortRef.current.abort();
-      addLog({
-        type: "abort",
-        message: "Previous request aborted",
-      });
-    }
+  //const abortRef = useRef(null);
+  // const handleSend = async () => {
+  //   if (abortRef.current && status === "loading") {
+  //     abortRef.current.abort();
+  //     addLog({
+  //       type: "abort",
+  //       message: "Previous request aborted",
+  //     });
+  //   }
 
-    const controller = new AbortController();
-    abortRef.current = controller;
+  //   const controller = new AbortController();
+  //   abortRef.current = controller;
 
-    addLog({
-      type: "request",
-      message: "Request initiated",
-      meta: { ...config },
-    });
+  //   addLog({
+  //     type: "request",
+  //     message: "Request initiated",
+  //     meta: { ...config },
+  //   });
 
-    setStatus("loading");
-    setErrorInfo(null);
-    setData(null);
+  //   setStatus("loading");
+  //   setErrorInfo(null);
+  //   setData(null);
 
-    try {
-      const response = await fetchData(config, controller.signal);
-      addLog({
-        type: "success",
-        message: "Request completed successfully",
-      });
+  //   try {
+  //     const response = await fetchData(config, controller.signal);
+  //     addLog({
+  //       type: "success",
+  //       message: "Request completed successfully",
+  //     });
 
-      setData(response.data);
-      setStatus("success");
-    } catch (err) {
-      if (err.type === "abort") {
-        addLog({
-          type: "abort",
-          message: "Request aborted",
-        });
-        return;
-      }
+  //     setData(response.data);
+  //     setStatus("success");
+  //   } catch (err) {
+  //     if (err.type === "abort") {
+  //       addLog({
+  //         type: "abort",
+  //         message: "Request aborted",
+  //       });
+  //       return;
+  //     }
 
-      addLog({
-        type: "error",
-        message: err.message,
-      });
+  //     addLog({
+  //       type: "error",
+  //       message: err.message,
+  //     });
 
-      setErrorInfo(err);
-      setStatus("error");
-    } finally {
-      abortRef.current = null;
-    }
-  };
+  //     setErrorInfo(err);
+  //     setStatus("error");
+  //   } finally {
+  //     abortRef.current = null;
+  //   }
+  // };
 
   return (
     <>
@@ -86,7 +85,7 @@ export default function ChaosControls() {
 
         <div className="pt-4 md:pt-6">
           <button
-            onClick={handleSend}
+            onClick={runRequest}
             className="mt-4 w-full rounded-md bg-cyan-500 py-2 text-sm text-black hover:bg-cyan-400 transition"
           >
             Send Request

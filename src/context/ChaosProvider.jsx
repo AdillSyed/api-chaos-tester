@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChaosContext } from "./ChaosContext";
+import { fetchData } from "../services/apiClient";
 
 export function ChaosProvider({ children }) {
   const [config, setConfig] = useState({
@@ -7,7 +8,6 @@ export function ChaosProvider({ children }) {
     error: "none",
     offline: false,
   });
-
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [data, setData] = useState(null);
   const [errorInfo, setErrorInfo] = useState(null);
@@ -17,6 +17,8 @@ export function ChaosProvider({ children }) {
     const stored = localStorage.getItem("chaos:userPresets");
     return stored ? JSON.parse(stored) : [];
   });
+
+  const abortRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem(
@@ -63,6 +65,52 @@ export function ChaosProvider({ children }) {
     setUserPresets((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const runRequest = async () => {
+    if (abortRef.current && status === "loading") {
+      abortRef.current.abort();
+      addLog({
+        type: "abort",
+        message: "Previous request aborted",
+      });
+    }
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    addLog({
+      type: "request",
+      message: "Request initiated",
+      meta: config,
+    });
+
+    setStatus("loading");
+    setErrorInfo(null);
+    setData(null);
+
+    try {
+      const response = await fetchData(config, controller.signal);
+
+      addLog({
+        type: "success",
+        message: "Request completed successfully",
+      });
+
+      setData(response.data);
+      setStatus("success");
+    } catch (err) {
+      if (err.type === "abort") return;
+
+      addLog({
+        type: "error",
+        message: err.message,
+      });
+
+      setErrorInfo(err);
+      setStatus("error");
+    } finally {
+      abortRef.current = null;
+    }
+  };
 
   return (
     <ChaosContext.Provider
@@ -84,7 +132,8 @@ export function ChaosProvider({ children }) {
         savePreset,
         updatePreset,
         deletePreset,
-        }}
+        runRequest,
+      }}
     >
       {children}
     </ChaosContext.Provider>
