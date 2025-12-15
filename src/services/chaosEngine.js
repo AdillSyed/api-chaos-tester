@@ -1,17 +1,19 @@
-export function applyChaos({ delay, error, offline }) {
+export function applyChaos({ delay, error, offline }, signal) {
   return new Promise((resolve, reject) => {
-    // Offline simulation
-    if (offline) {
-      reject({
-        type: "offline",
-        message: "Network unavailable",
-      });
+    if (signal?.aborted) {
+      reject({ type: "abort", message: "Request aborted" });
       return;
     }
 
-    // Artificial delay
-    setTimeout(() => {
-      // Forced error simulation
+    const timeoutId = setTimeout(() => {
+      if (offline) {
+        reject({
+          type: "offline",
+          message: "Network unavailable",
+        });
+        return;
+      }
+
       if (error !== "none") {
         reject({
           type: "http",
@@ -21,7 +23,6 @@ export function applyChaos({ delay, error, offline }) {
         return;
       }
 
-      // Success path
       resolve({
         data: [
           { id: 1, name: "Alpha", status: "active" },
@@ -30,5 +31,11 @@ export function applyChaos({ delay, error, offline }) {
         ],
       });
     }, delay);
+
+    // Abort handling
+    signal?.addEventListener("abort", () => {
+      clearTimeout(timeoutId);
+      reject({ type: "abort", message: "Request aborted" });
+    });
   });
 }
