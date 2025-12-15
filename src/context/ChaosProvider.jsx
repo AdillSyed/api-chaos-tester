@@ -12,8 +12,11 @@ export function ChaosProvider({ children }) {
   const [data, setData] = useState(null);
   const [errorInfo, setErrorInfo] = useState(null);
   const [logs, setLogs] = useState([]);
+  const [loggingEnabled, setLoggingEnabled] = useState(true);
 
   const addLog = (entry) => {
+    if (!loggingEnabled) return;
+
     setLogs((prev) => [
       {
         id: crypto.randomUUID(),
@@ -22,6 +25,10 @@ export function ChaosProvider({ children }) {
       },
       ...prev,
     ]);
+  };
+
+  const clearLogs = () => {
+    setLogs([]);
   };
 
 
@@ -38,6 +45,9 @@ export function ChaosProvider({ children }) {
         setErrorInfo,
         logs,
         addLog,
+        clearLogs,
+        loggingEnabled,
+        setLoggingEnabled,
         }}
     >
       {children}
