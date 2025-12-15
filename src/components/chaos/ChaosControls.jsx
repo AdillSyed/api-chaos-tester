@@ -6,34 +6,53 @@ import { useChaos } from "../../context/useChaos";
 import { fetchData } from "../../services/apiClient";
 
 export default function ChaosControls() {
-  const { config, setStatus, setData, setErrorInfo } = useChaos();
+  const { config, setStatus, setData, setErrorInfo, addLog } = useChaos();
 
   const abortRef = useRef(null);
   const handleSend = async () => {
-    // Abort previous request if it exists
     if (abortRef.current) {
       abortRef.current.abort();
+      addLog({
+        type: "abort",
+        message: "Previous request aborted",
+      });
     }
 
     const controller = new AbortController();
     abortRef.current = controller;
+
+    addLog({
+      type: "request",
+      message: "Request initiated",
+      meta: { ...config },
+    });
 
     setStatus("loading");
     setErrorInfo(null);
     setData(null);
 
     try {
-      const response = await fetchData(
-        config,
-        controller.signal
-      );
+      const response = await fetchData(config, controller.signal);
+      addLog({
+        type: "success",
+        message: "Request completed successfully",
+      });
+
       setData(response.data);
       setStatus("success");
     } catch (err) {
       if (err.type === "abort") {
-        // Silent abort — do NOT show error UI
+        addLog({
+          type: "abort",
+          message: "Request aborted",
+        });
         return;
       }
+
+      addLog({
+        type: "error",
+        message: err.message,
+      });
 
       setErrorInfo(err);
       setStatus("error");

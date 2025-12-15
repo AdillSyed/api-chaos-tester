@@ -1,5 +1,6 @@
 import ChaosControls from "./components/chaos/ChaosControls";
 import ResponsePanel from "./components/response/ResponsePanel";
+import EventLogPanel from "./components/logs/EventLogPanel";
 
 function App() {
   return (
@@ -14,7 +15,10 @@ function App() {
       </header>
       <div className="grid gap-6 md:min-h-[calc(100vh-120px)] md:grid-cols-[360px_1fr]">
         <ChaosControls />
-        <ResponsePanel />
+        <div className="flex h-full flex-col gap-4">
+          <ResponsePanel />
+          <EventLogPanel />
+        </div>
       </div>
     </div>
   );
