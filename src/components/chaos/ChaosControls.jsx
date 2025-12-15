@@ -4,6 +4,7 @@ import ErrorControl from "./ErrorControl";
 import NetworkControl from "./NetworkControl";
 import { useChaos } from "../../context/useChaos";
 import { fetchData } from "../../services/apiClient";
+import ScenarioPresets from "../presets/ScenarioPresets";
 
 export default function ChaosControls() {
   const { config, setStatus, setData, setErrorInfo, addLog } = useChaos();
@@ -67,6 +68,7 @@ export default function ChaosControls() {
       </p>
 
       <div className="mt-6 space-y-6">
+        <ScenarioPresets />
         <DelayControl />
         <ErrorControl />
         <NetworkControl />
