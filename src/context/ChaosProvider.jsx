@@ -1,6 +1,5 @@
-import { createContext, useState } from "react";
-
-export const ChaosContext = createContext(null);
+import { useState } from "react";
+import { ChaosContext } from "./ChaosContext";
 
 export function ChaosProvider({ children }) {
   const [config, setConfig] = useState({
@@ -13,7 +12,6 @@ export function ChaosProvider({ children }) {
   const [data, setData] = useState(null);
   const [errorInfo, setErrorInfo] = useState(null);
 
-
   return (
     <ChaosContext.Provider
       value={{
@@ -25,7 +23,7 @@ export function ChaosProvider({ children }) {
         setData,
         errorInfo,
         setErrorInfo,
-}}
+        }}
     >
       {children}
     </ChaosContext.Provider>
