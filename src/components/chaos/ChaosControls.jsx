@@ -1,13 +1,15 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import DelayControl from "./DelayControl";
 import ErrorControl from "./ErrorControl";
 import NetworkControl from "./NetworkControl";
 import { useChaos } from "../../context/useChaos";
 import { fetchData } from "../../services/apiClient";
 import ScenarioPresets from "../presets/ScenarioPresets";
+import SavePresetModal from "../presets/SavePresetModal";
 
 export default function ChaosControls() {
   const { config, setStatus, setData, setErrorInfo, addLog } = useChaos();
+  const [showSave, setShowSave] = useState(false);
 
   const abortRef = useRef(null);
   const handleSend = async () => {
@@ -61,6 +63,7 @@ export default function ChaosControls() {
   };
 
   return (
+    <>
     <aside className="flex flex-col md:h-full rounded-xl bg-[#0f1629] p-6 shadow-[0_0_0_1px_#1f2a44]">
       <h2 className="text-lg font-medium text-white">Chaos Controls</h2>
       <p className="mt-1 text-sm text-gray-400">
@@ -72,6 +75,12 @@ export default function ChaosControls() {
         <DelayControl />
         <ErrorControl />
         <NetworkControl />
+        <button
+          onClick={() => setShowSave(true)}
+          className="w-full rounded-md border border-[#1f2a44] py-2 text-sm text-gray-300 hover:bg-[#162040]"
+        >
+          Save as Preset
+        </button>
 
         <div className="pt-4 md:pt-6">
           <button
@@ -83,5 +92,7 @@ export default function ChaosControls() {
         </div>
       </div>
     </aside>
+    {showSave && <SavePresetModal onClose={() => setShowSave(false)} />}
+    </>
   );
 }

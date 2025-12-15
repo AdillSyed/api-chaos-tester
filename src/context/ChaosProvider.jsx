@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChaosContext } from "./ChaosContext";
 
 export function ChaosProvider({ children }) {
@@ -13,6 +13,17 @@ export function ChaosProvider({ children }) {
   const [errorInfo, setErrorInfo] = useState(null);
   const [logs, setLogs] = useState([]);
   const [loggingEnabled, setLoggingEnabled] = useState(true);
+  const [userPresets, setUserPresets] = useState(() => {
+    const stored = localStorage.getItem("chaos:userPresets");
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+    "chaos:userPresets",
+    JSON.stringify(userPresets)
+    );
+  }, [userPresets]);
 
   const addLog = (entry) => {
     if (!loggingEnabled) return;
@@ -29,6 +40,27 @@ export function ChaosProvider({ children }) {
 
   const clearLogs = () => {
     setLogs([]);
+  };
+
+  const savePreset = (preset) => {
+    setUserPresets((prev) => [
+      {
+        ...preset,
+        id: crypto.randomUUID(),
+        system: false,
+      },
+      ...prev,
+    ]);
+  };
+
+  const updatePreset = (id, updated) => {
+    setUserPresets((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...updated } : p))
+    );
+  };
+
+  const deletePreset = (id) => {
+    setUserPresets((prev) => prev.filter((p) => p.id !== id));
   };
 
 
@@ -48,6 +80,10 @@ export function ChaosProvider({ children }) {
         clearLogs,
         loggingEnabled,
         setLoggingEnabled,
+        userPresets,
+        savePreset,
+        updatePreset,
+        deletePreset,
         }}
     >
       {children}
