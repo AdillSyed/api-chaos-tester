@@ -17,6 +17,7 @@ function App() {
         <ChaosControls />
         <div className="flex h-full flex-col gap-4">
           <ResponsePanel />
+          <div className="h-px bg-[#1f2a44]" />
           <EventLogPanel />
         </div>
       </div>

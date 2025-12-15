@@ -8,7 +8,7 @@ export default function ResponsePanel() {
   const { status, data, errorInfo } = useChaos();
 
   return (
-    <section className="flex h-full flex-col rounded-xl bg-[#0f1629] p-6 shadow-[0_0_0_1px_#1f2a44] md:p-6">
+    <section className="flex flex-col flex-1 rounded-xl bg-[#0f1629] p-6 shadow-[0_0_0_1px_#1f2a44] md:p-6">
       <header className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-medium text-white">
           UI Response Preview

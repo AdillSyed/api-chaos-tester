@@ -4,7 +4,7 @@ export default function EventLogPanel() {
   const { logs } = useChaos();
 
   return (
-    <aside className="rounded-xl bg-[#0f1629] p-4 shadow-[0_0_0_1px_#1f2a44]">
+    <aside className="rounded-xl bg-[#0f1629] p-4 max-h-[240px] overflow-hidden shadow-[0_0_0_1px_#1f2a44]">
       <h3 className="mb-3 text-sm font-medium text-gray-300">
         Event Log
       </h3>
@@ -14,7 +14,7 @@ export default function EventLogPanel() {
           No events recorded yet
         </p>
       ) : (
-        <ul className="space-y-2 max-h-64 overflow-y-auto">
+        <ul className="space-y-2 max-h-[200px] overflow-y-auto">
           {logs.map((log) => (
             <li
               key={log.id}
