@@ -5,8 +5,17 @@
 # 🧪 API Chaos Tester (Frontend)
 
 A frontend-only tool to **simulate real-world API failure scenarios**—latency, errors, offline states—and observe how a UI behaves under stress.
-
 Built to demonstrate **production-grade async handling**, **state-driven UI**, and **tool design thinking**.
+
+This project focuses on frontend resilience rather than backend chaos testing.
+It demonstrates how React applications should behave under real-world API failures such as timeouts, partial responses, and error states.
+
+### Concepts Implemented
+
+* Global state management using Context API for request lifecycle tracking
+* Centralized handling of loading, success, and error states
+* Predictable UI behavior during retries and failures
+* Clear separation between UI components and request logic
 
 ---
 
