@@ -44,22 +44,65 @@ export function ChaosProvider({ children }) {
     setLogs([]);
   };
 
-  const exportLogs = () => {
+  const exportLogs = (format = "json") => {
+    if (logs.length === 0) return;
+
+    if (format === "json") {
+      exportAsJSON(logs);
+    }
+
+    if (format === "csv") {
+      exportAsCSV(logs);
+    }
+  };
+
+  const exportAsJSON = (logs) => {
     const payload = {
       exportedAt: new Date().toISOString(),
       total: logs.length,
       logs,
     };
 
-    const blob = new Blob([JSON.stringify(payload, null, 2)], {
-      type: "application/json",
-    });
+    downloadFile(
+      JSON.stringify(payload, null, 2),
+      `api-chaos-logs-${Date.now()}.json`,
+      "application/json"
+    );
+  };
 
+  const exportAsCSV = (logs) => {
+    const headers = [
+      "timestamp",
+      "type",
+      "message",
+      "delay",
+      "error",
+      "offline",
+    ];
+
+    const rows = logs.map((log) => [
+      log.timestamp,
+      log.type,
+      log.message,
+      log.meta?.delay ?? "",
+      log.meta?.error ?? "",
+      log.meta?.offline ?? "",
+    ]);
+
+    const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join(
+      "\n"
+    );
+
+    downloadFile(csv, `api-chaos-logs-${Date.now()}.csv`, "text/csv");
+  };
+
+  const downloadFile = (content, filename, type) => {
+    const blob = new Blob([content], { type });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
 
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `api-chaos-logs-${Date.now()}.json`;
+    a.download = filename;
     a.click();
 
     URL.revokeObjectURL(url);
