@@ -1,3 +1,7 @@
+## 🌐 Live Demo
+
+👉 https://api-chaos-tester.netlify.app/
+
 # 🧪 API Chaos Tester (Frontend)
 
 A frontend-only tool to **simulate real-world API failure scenarios**—latency, errors, offline states—and observe how a UI behaves under stress.
