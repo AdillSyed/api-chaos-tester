@@ -1,7 +1,7 @@
 import { useChaos } from "../../context/useChaos";
 
 export default function EventLogPanel() {
-  const { logs, clearLogs, loggingEnabled, setLoggingEnabled } = useChaos();
+  const { logs, clearLogs, exportLogs, loggingEnabled, setLoggingEnabled } = useChaos();
 
   return (
     <aside className="rounded-xl bg-[#0f1629] p-4 max-h-[240px] overflow-hidden shadow-[0_0_0_1px_#1f2a44]">
@@ -16,6 +16,13 @@ export default function EventLogPanel() {
             className="rounded-md px-2 py-1 text-xs border border-[#1f2a44] text-gray-300 hover:bg-[#162040] transition"
           >
             {loggingEnabled ? "Pause" : "Resume"}
+          </button>
+          <button
+            onClick={exportLogs}
+            disabled={logs.length === 0}
+            className="rounded-md px-2 py-1 text-xs border border-[#1f2a44] text-gray-300 hover:bg-[#162040] disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Export
           </button>
           <button
             onClick={clearLogs}

@@ -44,6 +44,27 @@ export function ChaosProvider({ children }) {
     setLogs([]);
   };
 
+  const exportLogs = () => {
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      total: logs.length,
+      logs,
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = `api-chaos-logs-${Date.now()}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
+
   const savePreset = (preset) => {
     setUserPresets((prev) => [
       {
@@ -126,6 +147,7 @@ export function ChaosProvider({ children }) {
         logs,
         addLog,
         clearLogs,
+        exportLogs,
         loggingEnabled,
         setLoggingEnabled,
         userPresets,
